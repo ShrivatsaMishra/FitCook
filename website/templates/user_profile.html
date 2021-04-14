@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <title>Profile</title>
+{% endblock %}
+
+{% block body %}
+<br>
+    <div class="container bg_dark">
+        <br>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Name</div>
+            <div class="col-sm">: ABC</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Adress</div>
+            <div class="col-sm">: ABC</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Phone No.</div>
+            <div class="col-sm">: ABC</div>
+        </div>
+        <br>
+    </div>
+    <br><hr><br>
+    <div class="container">
+        <div class="text-center h3">Past Orders</div>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th scope="col">Order ID</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td scope="row">1</th>
+                <td>1/1/1</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>1/1/1</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>1/1/1</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

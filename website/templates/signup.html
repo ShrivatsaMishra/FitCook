@@ -11,7 +11,7 @@
         <div class="sidenav col-sm text-center abcd">
             <div class="login-main-text">
                 <br><br><br><br><br>
-                <h2>Sign Up Page</h2>
+                <h2>Register</h2>
                 <p>Login or register from here to access.</p>
             </div>
         </div>
@@ -19,34 +19,28 @@
         <div class="main col-sm">
             <div class="register-form">
                 <form>
-                    <div class="form-group">
-                        <label class="h6">Who are you?</label><br>
-                        <input type="radio" id="Customer" name="type" value="customer_signup">
-                        <label for="Customer">Customer</label>
-                        <input type="radio" id="Manager" name="type" value="manager_signup" class="ml-4">
-                        <label for="Manager">Manager</label>
-                        <input type="radio" id="Delivery" name="type" value="delivery_signup" class="ml-4">
-                        <label for="Delivery">Delivery Person</label><br>
-                        <input type="radio" id="Dietician" name="type" value="chev_signup">
-                        <label for="Dietician">Chef/Dietician</label>
-                        <input type="radio" id="Marketing" name="type" value="publicity_signup"  class="ml-4">
-                        <label for="Marketing">Marketing Team</label><br>
+                    <div class="form-group text-green ">
+                        <label class="h6">Who do you want to be?</label><br><br>
+                        <ul>
+                            <li>
+                                <a href="{{url_for('auth.custumer_signup')}}">
+                                <label for="Customer">Customer</label></a><br>
+                            </li><li>
+                                <a href="{{url_for('auth.manager_signup')}}">
+                                <label for="Manager">Manager</label></a><br>
+                            </li><li>
+                                <a href="{{url_for('auth.deliveryperson_signup')}}">
+                                <label for="Delivery">Delivery Person</label></a><br>
+                            </li><li>
+                                <a href="{{url_for('auth.chef_signup')}}">
+                                <label for="Dietician">Chef/Dietician</label></a><br>
+                            </li><li>
+                                <a href="{{url_for('auth.publicity_signup')}}">
+                                <label for="Marketing">Marketing Team</label></a>
+                            </li>
+                        </ul>
+                        <br>
                     </div>
-                    <div class="form-group">
-                        <label class="h6">New User Name</label>
-                        <input type="text" class="form-control" placeholder="User Name">
-                    </div>
-                    <div class="form-group">
-                        <label class="h6">New Password</label>
-                        <input type="password" class="form-control" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                        <label class="h6">Confirm Password</label>
-                        <input type="password" class="form-control" placeholder="Confirm Password">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-success">Register</button>
-                    <button type="submit" class="btn btn-light">Login</button>
                 </form>
             </div>
         </div>

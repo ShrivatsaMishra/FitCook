@@ -11,6 +11,15 @@ body {
     color: #E0EAAE;
 }
 
+a {
+    color:#97be11;
+    padding-left: 10%;
+}
+a :hover {
+    color:#444;
+    
+}
+
 /* Header */
 
 .nav-item {

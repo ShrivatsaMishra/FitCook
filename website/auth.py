@@ -23,9 +23,9 @@ def custumer_signup():
 def chef_signup():
     return render_template("chef_signup.html")
 
-@auth.route('/delivery_signup')
-def delivery_signup():
-    return render_template("delivery_signup.html")
+@auth.route('/deliveryperson_signup')
+def deliveryperson_signup():
+    return render_template("deliveryperson_signup.html")
 
 @auth.route('/manager_signup')
 def manager_signup():

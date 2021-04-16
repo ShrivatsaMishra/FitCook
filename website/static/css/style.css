@@ -84,6 +84,9 @@ body {
     }
 }
 
+.address{
+    height: 10ex;
+}
 
 .login-main-text{
     margin-top: 10%;

@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import date
 from flask_mysqldb import MySQL
 import yaml, random
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'pokemon pokemon'
 #db = yaml.load(open('db.yaml'))
 #app.config['MYSQL_HOST'] = db['mysql_host']
 #app.config['MYSQL_USER'] = db['mysql_user']
@@ -35,15 +35,30 @@ def Place_Order(id):
                 #id = input['id']
             if len(input)>0:
                 #print(input)
+                cost=0
+                for i in range(len(input)):
+                    selected = cur.execute("SELECT Cost FROM Dish WHERE Dish_ID = %s", (input[i],))
+                    price = cur.fetchall()
+                    cost += int(price[0][0])
+                
+                selected2 = cur.execute("SELECT Wallet FROM Customer WHERE User_ID = %s", (id,))
+                wallet = cur.fetchall()
+                walletint = int(wallet[0][0])
+                if walletint < cost:
+                    flash("You don't have enough money in your wallet", "danger")
+                    return redirect(request.url)
+
+                cur.execute("""UPDATE Customer SET Wallet = %s WHERE User_ID = %s""",(walletint-cost,id))
+
                 resultValue4 = cur.execute("SELECT Order_ID FROM Orders ORDER BY Order_ID DESC LIMIT 1;")
                 lastentry = cur.fetchall()
                 lastid = int(lastentry[0][0])+1
                 today = date.today()
                 d1 = today.strftime("%Y/%m/%d")
-                #query = """INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES ('%s','%s','%s','%s','%s','%s');"""
-                cur.execute("""INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES (%s,%s,%s,%s,%s,%s)""",(id,lastid,0,d1,random.randrange(1, 100),2))
+                
+                cur.execute("""INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES (%s,%s,%s,%s,%s,%s)""",(id,lastid,cost,d1,random.randrange(1, 100),2))
                 mysql.connection.commit()
-                cost=0
+
                 for i in range(len(input)):
                     resultValue = cur.execute("SELECT Cost FROM Dish WHERE Dish_ID = %s", (input[i],))
                     price = cur.fetchall()
@@ -51,9 +66,10 @@ def Place_Order(id):
                     cur.execute("""INSERT INTO contains (Dish_ID,Order_ID) VALUES (%s,%s)""",(input[i],lastid))
                     mysql.connection.commit()
 
-                cur.execute("""UPDATE Orders SET Price = %s WHERE Order_ID = %s""",(cost,lastid))
-                mysql.connection.commit()
+                #cur.execute("""UPDATE Orders SET Price = %s WHERE Order_ID = %s""",(cost,lastid))
+                #mysql.connection.commit()
                 cur.close()
+            flash("Your order is has been placed, its on the way!!!", "success")
             return redirect(url_for('customer'))
 
         if request.form['submit_button'] == 'Back':
@@ -61,28 +77,12 @@ def Place_Order(id):
             return redirect(url_for('customer'))
     return render_template('PlaceOrder.html', Dishdetails=Dishdetails)
 
-@app.route('/publicity')
-def Publicity():
-    id=1
-    cur = mysql.connection.cursor()
-    resultValue1 = cur.execute("SELECT * FROM Customer WHERE USER_ID = %s", (id,))
-    Userdetails = cur.fetchall()
-    #print("hi",len(Orderdetails))
 
-    resultValue2 = cur.execute("Select Dish_ID, Name, Cost, Rating FROM Dish ORDER BY Cost")
-    DishDetails = cur.fetchall()
-
-    sorted(DishDetails, key=lambda x: -x[2])
-
-    if(resultValue1>0):
-        return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
-    return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
-         
 
 @app.route('/customer', methods=['GET', 'POST'])
 def customer():
     cur = mysql.connection.cursor()
-    id=1
+    id= 23
     resultValue1 = cur.execute("SELECT * FROM Customer WHERE USER_ID = %s", (id,))
     Userdetails = cur.fetchall()
 
@@ -115,6 +115,7 @@ def signup():
 @app.route('/user_profile')
 def user_profile():
     return render_template("user_profile.html")
+
 
 if __name__ == '__main__':
     app.run(debug=True)

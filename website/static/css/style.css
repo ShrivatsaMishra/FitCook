@@ -16,7 +16,7 @@ a {
     padding-left: 10%;
 }
 a :hover {
-    color:#444;
+    color:#3D434A;
     
 }
 
@@ -100,7 +100,7 @@ a :hover {
 .login-main-text{
     margin-top: 10%;
     padding: 60px;
-    color: #fff;
+    color: #FBFAFA;
 }
 
 .login-main-text h2{
@@ -108,8 +108,8 @@ a :hover {
 }
 
 .btn-black{
-    background-color: #000 !important;
-    color: #fff;
+    background-color: #3D434A !important;
+    color: #FBFAFA;
 }
 
 /* Carousel */
@@ -127,7 +127,7 @@ a :hover {
     padding-left: 2%;
     padding-right: 2%;
     background: #97be11;
-    color:#444;
+    color:#3D434A;
     border-radius: 10px;
     margin-left: 42%;
 }
@@ -141,12 +141,12 @@ a :hover {
     padding-left: 2%;
     padding-right: 2%;
     background: #97be11;
-    color:#444;
+    color:#3D434A;
     border-radius: 10px;
     margin-left: 0%;
 }
 .button-left:hover {
-    color:#E0EAAE;
+    color:#9EA276;
 }
 
 .button-right {
@@ -155,10 +155,10 @@ a :hover {
     padding-left: 2%;
     padding-right: 2%;
     background: #97be11;
-    color:#444;
+    color:#3D434A;
     border-radius: 10px;
     margin-left: 80%;
 }
 .button-right:hover {
-    color:#E0EAAE;
+    color:#9EA276;
 }

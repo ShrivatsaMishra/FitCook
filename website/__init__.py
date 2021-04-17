@@ -38,6 +38,23 @@ def create_app():
         if(resultValue1>0):
             return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
         return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
+
+    @app.route('/publicityBest')
+    def Publicity_best():
+        id=1
+        cur = mysql.connection.cursor()
+        resultValue1 = cur.execute("SELECT * FROM Customer WHERE USER_ID = %s", (id,))
+        Userdetails = cur.fetchall()
+        #print("hi",len(Orderdetails))
+
+        resultValue2 = cur.execute("Select Dish_ID, Name, Cost, Rating FROM Dish")
+        DishDetails = cur.fetchall()
+
+        DishDetails = sorted(DishDetails, key=lambda x: -x[3])
+
+        if(resultValue1>0):
+            return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
+        return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
             
     
     @app.route('/login')

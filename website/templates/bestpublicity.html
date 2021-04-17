@@ -1,0 +1,56 @@
+{% extends "layout_LoggedIn.html" %}
+
+{% block head %}
+    <title>Profile</title>
+{% endblock %}
+
+{% block body %}
+<form method = "POST" action = "">
+<br>
+<div class="text-center h3">Your details</div>
+    <div class="container bg_dark">
+        <br>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Name</div>
+            <div class="col-sm">: {{Userdetails[0][1]}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Adress</div>
+            <div class="col-sm">: {{Userdetails[0][4]}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Phone No.</div>
+            <div class="col-sm">: {{Userdetails[0][5]}}</div>
+        </div>
+        <br>
+    </div>
+    <br><hr><br>
+    <div class="container">
+        <div class="text-center h3">Dishes</div> <br>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th>Dish_ID</th>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for Dish in DishDetails %}
+                <tr>
+                    <td>{{Dish[0]}}</td>
+                    <td>{{Dish[1]}}</td>
+                    <td>{{Dish[3]}}</td>
+                    <td>{{Dish[2]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br><hr><br>
+</form>>
+{% endblock %}

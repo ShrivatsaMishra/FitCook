@@ -69,8 +69,10 @@ def Publicity():
     Userdetails = cur.fetchall()
     #print("hi",len(Orderdetails))
 
-    resultValue2 = cur.execute("Select Dish_ID, Name, Cost, Rating FROM Dish")
+    resultValue2 = cur.execute("Select Dish_ID, Name, Cost, Rating FROM Dish ORDER BY Cost")
     DishDetails = cur.fetchall()
+
+    sorted(DishDetails, key=lambda x: -x[2])
 
     if(resultValue1>0):
         return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 

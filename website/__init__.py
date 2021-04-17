@@ -30,18 +30,31 @@ def create_app():
         Userdetails = cur.fetchall()
         #print("hi",len(Orderdetails))
 
-        resultValue2 = cur.execute("Select Dish_ID, Name, Price, Rating FROM Dish")
-        DishSDetails = cur.fetchall()
+        resultValue2 = cur.execute("Select Dish_ID, Name, Cost, Rating FROM Dish")
+        DishDetails = cur.fetchall()
+
+        DishDetails = sorted(DishDetails, key=lambda x: -x[2])
 
         if(resultValue1>0):
-            return render_template("publicity.html", userDetails=Userdetails, dishSDetails=DishSDetails) 
-        return render_template("publicity.html", userDetails=Userdetails, dishSDetails=DishSDetails) 
-         
-
-
-    from .views import views
-    from .auth import auth
+            return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
+        return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
+            
     
-    app.register_blueprint(views, url_prefix="/")
-    app.register_blueprint(auth, url_prefix="/")
+    @app.route('/login')
+    def login():
+        return render_template("login.html")
+
+    @app.route('/logout')
+    def logout():
+        return "<h2>Log Out</h2>"
+
+
+    @app.route('/signup')
+    def signup():
+        return render_template("signup.html")
+
+    @app.route('/user_profile')
+    def user_profile():
+        return render_template("user_profile.html")
+
     return app

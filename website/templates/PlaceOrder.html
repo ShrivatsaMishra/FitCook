@@ -1,0 +1,51 @@
+{% extends "layout_LoggedIn.html" %}
+
+{% block head %}
+    <title>Profile</title>
+{% endblock %}
+
+{% block body %}
+<form method = "POST" action = "">
+<br>
+    <div class="container">
+        <div class="text-center h3">Dishes</div>
+        <table class="container table table-hover table-striped bg_dark text-center">
+            <thead>
+            <tr>
+                <th scope="col">Dish_ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Category</th>
+                <th scope="col">Calories</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Fats</th>
+                <th scope="col">Carbs</th>
+                <th scope="col">Protein</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+            {% for Dish in Dishdetails %}
+                <tr>
+                    <td>{{Dish[0]}}</td>
+                    <td>{{Dish[1]}}</td>
+                    <td>{{Dish[2]}}</td>
+                    <td>{{Dish[3]}}</td>
+                    <td>{{Dish[4]}}</td>
+                    <td>{{Dish[5]}}</td>
+                    <td>{{Dish[6]}}</td>
+                    <td>{{Dish[7]}}</td>
+                    <td>{{Dish[8]}}</td>
+                    <td><input type="checkbox" value={{Dish[0]}} name="mycheckbox"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <input style="float:right; margin-right:600px" type="submit" name = "submit_button" value="Order Now">
+        <input style="float:right; margin-right:350px" type="submit" name = "submit_button" value="Back">
+        <br>
+        <br>
+    </div>
+</form> 
+{% endblock %}

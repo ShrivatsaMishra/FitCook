@@ -1,0 +1,80 @@
+{% extends "layout_LoggedIn.html" %}
+
+{% block head %}
+    <title>Dietician Profile</title>
+{% endblock %}
+
+{% block body %}
+<form method = "POST" action = "">
+<br>
+<div class="text-center h3">Your details</div>
+    <div class="container bg_dark">
+        {% for Dietician in Dietician_Details %}
+        <br>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Name</div>
+            <div class="col-sm">: {{Dietician[1]}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Adress</div>
+            <div class="col-sm">: {{Dietician[2]}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Phone No.</div>
+            <div class="col-sm">: {{Dietician[5]}}</iv>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+    <br><hr><br>
+    <div class="container">
+        <div class="text-center h3">Your Dishes</div>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th>Dish_ID</th>
+                <th>Name</th>
+                <th>Cost</th>
+                <th>Category</th>
+                <th>Calories</th>
+                <th>Rating</th>
+                <th>Fats</th>
+                <th>Carbs</th>
+                <th>Protein</th>
+                <th>Recipe</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for Dish in Dishdetails %}
+                <tr>
+                    <td>{{Dish[0]}}</td>
+                    <td>{{Dish[1]}}</td>
+                    <td>{{Dish[2]}}</td>
+                    <td>{{Dish[3]}}</td>
+                    <td>{{Dish[4]}}</td>
+                    <td>{{Dish[5]}}</td>
+                    <td>{{Dish[6]}}</td>
+                    <td>{{Dish[7]}}</td>
+                    <td>{{Dish[8]}}</td>
+                    <td>{{Dish[9]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>>
+        </table>
+        To EDIT any Dish, Type in its Dish_ID <input type="number" name="id" />
+        <br>
+        <input type="submit" name = "submit_button" value="Select">
+        <br>
+        <br>
+        <input type="submit" name = "submit_button" value="Insert New Entry">
+        <br>
+        <br>
+        Type Dish_ID of Dish you want to delete <input type="number" name="Dish_id_fordelete" />
+        <input type="submit" name = "submit_button" value="Delete_Entry">
+    </div>
+    <br><hr><br>
+</form>>
+{% endblock %}

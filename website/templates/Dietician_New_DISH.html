@@ -1,0 +1,72 @@
+{% extends "layout_LoggedIn.html" %}
+
+{% block head %}
+    <title>Dietician Profile</title>
+{% endblock %}
+
+{% block body %}
+<form method = "POST" action = "">
+<br>
+<div class="text-center h3">Insert New Dish</div>
+    <br><hr><br>
+    <div class="container">
+        <div class="text-center h3">All Dishes</div>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th>Dish_ID</th>
+                <th>Name</th>
+                <th>Cost</th>
+                <th>Category</th>
+                <th>Calories</th>
+                <th>Rating</th>
+                <th>Fats</th>
+                <th>Carbs</th>
+                <th>Protein</th>
+                <th>Recipe</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for Dish in Dishdetails %}
+                <tr>
+                    <td>{{Dish[0]}}</td>
+                    <td>{{Dish[1]}}</td>
+                    <td>{{Dish[2]}}</td>
+                    <td>{{Dish[3]}}</td>
+                    <td>{{Dish[4]}}</td>
+                    <td>{{Dish[5]}}</td>
+                    <td>{{Dish[6]}}</td>
+                    <td>{{Dish[7]}}</td>
+                    <td>{{Dish[8]}}</td>
+                    <td>{{Dish[9]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>>
+        </table>
+        <br>
+
+        Name <input type="string" name="Name" />
+        <br>
+        Cost <input type="string" name="Cost" />
+        <br>
+        Category <input type="string" name="Category" />
+        <br>
+        Calories <input type="string" name="Calories" />
+        <br>
+        Rating <input type="string" name="Rating" />
+        <br>
+        Fats <input type="string" name="Fats" />
+        <br>
+        Carbs <input type="string" name="Carbs" />
+        <br>
+        Protein <input type="string" name="Protein" />
+        <br>
+        Recipe <input type="string" name="Recipe" />
+        <br>
+        <input type="submit" name = "submit_button" value="Insert New Dish !">
+        <br>
+        <input type="submit" name = "submit_button" value="Back">
+    </div>
+    <br><hr><br>
+</form>>
+{% endblock %}

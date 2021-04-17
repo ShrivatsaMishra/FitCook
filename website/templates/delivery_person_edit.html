@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block head %}
+    <title>Profile</title>
+{% endblock %}
+
+{% block body %}
+
+<form method = "POST" action = "">    
+    <br><hr><br>
+    
+    <div class="container">
+        <div class="text-center h3">Completed Orders</div>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th scope="col">User ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Order ID</th>
+                <th scope="col">Address</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for user in userDetails2 %}
+            <tr>
+              <td> {{user[0]}} </td>
+              <td> {{user[1]}} </td>
+              <td> {{user[2]}} </td>
+              <td> {{user[3]}} </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        
+        <br>
+    </div>
+
+    <div class="container">
+        <div class="text-center h3">Pending Orders</div>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th scope="col">User ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Order ID</th>
+                <th scope="col">Address</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for user in userDetails1 %}
+            <tr>
+              <td> {{user[0]}} </td>
+              <td> {{user[1]}} </td>
+              <td> {{user[2]}} </td>
+              <td> {{user[3]}} </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    ID <input type="number" name="id" />
+        <br>
+        <input type="submit" name = "submit_button" value = "Deliver">
+
+        <input style="float:right; margin-right:350px" type="submit" name = "submit_button" value="Back">
+</form>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block head %}
+    <title>Profile</title>
+{% endblock %}
+
+{% block body %}
+
+<form method = "POST" action = "">
+<br>
+    <div class="container bg_dark">
+        <br>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Name</div>
+            <div class="col-sm">: ABC</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Adress</div>
+            <div class="col-sm">: ABC</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Phone No.</div>
+            <div class="col-sm">: ABC</div>
+        </div>
+        <br>
+    </div>
+    <br><hr><br>
+
+
+    <div class="container">
+        <div class="text-center h3">Completed Orders</div>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th scope="col">User ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Order ID</th>
+                <th scope="col">Address</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for user in userDetails2 %}
+            <tr>
+              <td> {{user[0]}} </td>
+              <td> {{user[1]}} </td>
+              <td> {{user[2]}} </td>
+              <td> {{user[3]}} </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="container">
+        <div class="text-center h3">Pending Orders</div>
+        <table class="container table table-hover table-striped bg_dark">
+            <thead>
+            <tr>
+                <th scope="col">User ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Order ID</th>
+                <th scope="col">Address</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for user in userDetails1 %}
+            <tr>
+              <td> {{user[0]}} </td>
+              <td> {{user[1]}} </td>
+              <td> {{user[2]}} </td>
+              <td> {{user[3]}} </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <br>
+        <input style="float:right; margin-right:450px" type="submit" name = "submit_button" value="Deliver Order">
+        <br>
+    </div>
+
+</form>
+{% endblock %}

@@ -22,6 +22,23 @@ def create_app():
             return render_template("user_profile.html", userDetails=userDetails) 
         return render_template("user_profile.html") 
 
+    @app.route('/publicity')
+    def Publicity():
+        id=1
+        cur = mysql.connection.cursor()
+        resultValue1 = cur.execute("SELECT * FROM Customer WHERE USER_ID = %s", (id,))
+        Userdetails = cur.fetchall()
+        #print("hi",len(Orderdetails))
+
+        resultValue2 = cur.execute("Select Dish_ID, Name, Price, Rating FROM Dish")
+        DishSDetails = cur.fetchall()
+
+        if(resultValue1>0):
+            return render_template("publicity.html", userDetails=Userdetails, dishSDetails=DishSDetails) 
+        return render_template("publicity.html", userDetails=Userdetails, dishSDetails=DishSDetails) 
+         
+
+
     from .views import views
     from .auth import auth
     

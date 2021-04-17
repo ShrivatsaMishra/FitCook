@@ -61,7 +61,21 @@ def Place_Order(id):
             return redirect(url_for('customer'))
     return render_template('PlaceOrder.html', Dishdetails=Dishdetails)
 
+@app.route('/publicity')
+def Publicity():
+    id=1
+    cur = mysql.connection.cursor()
+    resultValue1 = cur.execute("SELECT * FROM Customer WHERE USER_ID = %s", (id,))
+    Userdetails = cur.fetchall()
+    #print("hi",len(Orderdetails))
 
+    resultValue2 = cur.execute("Select Dish_ID, Name, Cost, Rating FROM Dish")
+    DishDetails = cur.fetchall()
+
+    if(resultValue1>0):
+        return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
+    return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
+         
 
 @app.route('/customer', methods=['GET', 'POST'])
 def customer():

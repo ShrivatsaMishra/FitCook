@@ -1,0 +1,4 @@
+mysql_host: 'localhost'
+mysql_username: 'admin'
+mysql_password: 'fitcook123'
+mysql_db: 'fitcook'

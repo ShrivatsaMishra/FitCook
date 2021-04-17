@@ -54,6 +54,7 @@
     <br><hr><br>
     <div class="container">
         <div class="text-center h3">Your Orders on their Way!</div>
+        <br>
         <table class="container table table-hover table-striped bg_dark">
             <thead>
             <tr>
@@ -72,10 +73,12 @@
                 <td>{{Orderway[2]}}</td>
             </tr>
                 {% endfor %}
-            </tbody>>
+            </tbody>
         </table>
         <br>
-        <input style="float:right; margin-right:450px" type="submit" name = "submit_button" value="Place Order of Dishes!">
+        <div class="border border-light p-3 mb-4">
+            <input class="button text-center btn" type="submit" name = "submit_button" value="Place Order of Dishes!">
+        </div>
         <br>
     </div> 
 </form>>

@@ -71,7 +71,6 @@ def Place_Order(id):
             return redirect(url_for('customer'))
     return render_template('PlaceOrder.html', Dishdetails=Dishdetails)
 
-
 @app.route('/customer', methods=['GET', 'POST'])
 def customer():
     cur = mysql.connection.cursor()
@@ -95,6 +94,99 @@ def customer():
             return redirect(url_for('Place_Order', id=id))
     return render_template("user_profile.html", Userdetails=Userdetails, Orderdetails=Orderdetails,
                            Orderonwaydetails=Orderonwaydetails)
+
+
+@app.route('/Order_confirm/<string:id>', methods=['GET', 'POST'])
+def Order_confirm(id):
+    cur = mysql.connection.cursor()
+    ID = session['ID']
+    cur.execute("select * from contains where Order_ID = %s", (id,))
+    Dishes = cur.fetchall()
+
+    flag = 0
+    for i in range(len(Dishes)):  # dishid
+        cur.execute("select Dish_ID, ingredient_ID,Amount from ingredient_list where Dish_ID = %s", (Dishes[i][0],))
+        Ingredients = cur.fetchall()
+        for j in range(len(Ingredients)):  # ingredients
+            cur.execute(
+                """select Ingredient_ID, Quantity_stored, Warehouse_ID from Warehouse natural join Delivery_person where DeliveryP_ID = %s and Ingredient_ID = %s""",
+                (ID, Ingredients[j][1]))
+            temp2 = cur.fetchall()
+            a = int(temp2[0][1]) - int(Ingredients[j][2])
+            if (a < 0):
+                flag = 1
+                break
+
+    if (flag == 0):
+
+        for i in range(len(Dishes)):  # dishid
+            cur.execute("select Dish_ID, ingredient_ID,Amount from ingredient_list where Dish_ID = %s", (Dishes[i][0],))
+            Ingredients = cur.fetchall()
+            for j in range(len(Ingredients)):  # ingredients
+                cur.execute(
+                    """select Ingredient_ID, Quantity_stored, Warehouse_ID from Warehouse natural join Delivery_person where DeliveryP_ID = 1 and Ingredient_ID = %s""",
+                    (Ingredients[j][1],))
+                temp2 = cur.fetchall()
+                a = int(temp2[0][1]) - int(Ingredients[j][2])
+                c = temp2[0][2]
+                b = Ingredients[j][1]
+                print(Dishes[i][0], Ingredients[j][1])
+                cur.execute(
+                    """UPDATE Warehouse SET Quantity_stored = %s WHERE Warehouse_ID = %s and  Ingredient_ID = %s""",
+                    (a, c, b))
+                mysql.connection.commit()
+
+        cur.execute("""UPDATE Orders SET delivered_status = 1 WHERE Order_ID = %s """, (id,))
+        mysql.connection.commit()
+        flash("Order Delivered!", "success")
+    else:
+
+        cur.execute("""UPDATE Orders SET delivered_status = 3 WHERE Order_ID = %s """, (id,))
+        mysql.connection.commit()
+        flash("Order Canceled! Insufficient Ingredients.", "danger")
+
+    cur.close()
+    return redirect(url_for('delivery_edit'))
+
+
+@app.route('/delivery_edit', methods=['GET', 'POST'])
+def delivery_edit():
+    cur = mysql.connection.cursor()
+    ID = session['ID']
+    resultValue1 = cur.execute(
+        "select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = %s and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;",(ID,))
+    userDetails1 = cur.fetchall()
+
+    resultValue2 = cur.execute(
+        "select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = %s and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;",(ID,))
+    userDetails2 = cur.fetchall()
+
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'Deliver':
+            input = request.form
+            id = input['id']
+            cur.close()
+            return redirect(url_for('Order_confirm', id=id))
+        else:
+            return redirect(url_for('delivery'))
+    return render_template('Delivery_person_edit.html', userDetails1=userDetails1, userDetails2=userDetails2)
+
+
+@app.route('/delivery', methods=['GET', 'POST'])
+def delivery():
+    cur = mysql.connection.cursor()
+    ID = session['ID']
+    resultValue1 = cur.execute(
+        "select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = %s and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;",(ID,))
+    userDetails1 = cur.fetchall()
+
+    resultValue2 = cur.execute(
+        "select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = %s and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;",(ID,))
+    userDetails2 = cur.fetchall()
+
+    if request.method == 'POST':
+        return redirect(url_for('delivery_edit'))
+    return render_template('Delivery_person.html', userDetails1=userDetails1, userDetails2=userDetails2)
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
@@ -179,7 +271,7 @@ def login():
                     return redirect(request.url)
                 else:
                     session['ID'] = User_ID
-                    return redirect(url_for('customer')) #CHANGE
+                    return redirect(url_for('delivery'))
             elif type == 'PR':
                 email = request.form.get('email')
                 cursor.execute("select PR_ID from PR where email = %s", (email,))
@@ -248,7 +340,6 @@ def customer_signup():
             mysql.connection.commit()
             cursor.close()
             #print(Name, password, Username, Income, Locality, District, Zip)
-            flash("Login over here", "danger")
 
             return redirect(url_for('login'))
 

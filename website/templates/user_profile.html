@@ -5,86 +5,78 @@
 {% endblock %}
 
 {% block body %}
+<form method = "POST" action = "">
 <br>
+<div class="text-center h3">Your details</div>
     <div class="container bg_dark">
         <br>
         <div class="row">
             <div class="col-1"></div>
             <div class="col-2 h6"> Name</div>
-            <div class="col-sm">: ABC</div>
+            <div class="col-sm">: {{Userdetails[0][1]}}</div>
         </div>
         <div class="row">
             <div class="col-1"></div>
             <div class="col-2 h6"> Adress</div>
-            <div class="col-sm">: ABC</div>
+            <div class="col-sm">: {{Userdetails[0][4]}}</div>
         </div>
         <div class="row">
             <div class="col-1"></div>
             <div class="col-2 h6"> Phone No.</div>
-            <div class="col-sm">: ABC</div>
+            <div class="col-sm">: {{Userdetails[0][5]}}</div>
         </div>
         <br>
     </div>
     <br><hr><br>
     <div class="container">
-        <div class="text-center h3">Past Orders</div>
+        <div class="text-center h3">Your Past Orders</div>
         <table class="container table table-hover table-striped bg_dark">
             <thead>
             <tr>
-                <th scope="col">Order ID</th>
-                <th scope="col">Date</th>
+                <th>Order_ID</th>
+                <th>Date</th>
+                <th>Number of Dishes</th>
+                <th>Price</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td scope="row">1</th>
-                <td>1/1/1</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>1/1/1</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>1/1/1</td>
-            </tr>
-            </tbody>
+            {% for Order in Orderdetails %}
+                <tr>
+                    <td>{{Order[0]}}</td>
+                    <td>{{Order[3]}}</td>
+                    <td>{{Order[1]}}</td>
+                    <td>{{Order[2]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>>
         </table>
-
-
     </div>
-
+    <br><hr><br>
     <div class="container">
-        <div class="text-center h3">Dishes</div>
-        <table class="container table table-hover table-striped bg_dark text-center">
+        <div class="text-center h3">Your Orders on their Way!</div>
+        <table class="container table table-hover table-striped bg_dark">
             <thead>
-                <tr>
-                    <th scope="col">Dish_ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Cost(INR)</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Calories</th>
-                    <th scope="col">Rating</th>
-                    <th scope="col">Fats</th>
-                    <th scope="col">Carbs</th>
-                    <th scope="col">Protein</th>
-                </tr>
+            <tr>
+                <th>Order_ID</th>
+                <th>Date</th>
+                <th>Number of Dishes</th>
+                <th>Price</th>
+            </tr>
             </thead>
             <tbody>
-                {% for User in userDetails %}
-                <tr>
-                    <th scope="col">{{User[0]}}</th>
-                    <td scope="col">{{User[1]}}</th>
-                    <td scope="col">{{User[2]}}</th>
-                    <td scope="col">{{User[3]}}</th>
-                    <td scope="col">{{User[4]}}</th>
-                    <td scope="col">{{User[5]}}</th>
-                    <td scope="col">{{User[6]}}</th>
-                    <td scope="col">{{User[7]}}</th>
-                    <td scope="col">{{User[8]}}</th>
-                </tr>
-                {% endfor%}
-            </tbody>
+            {% for Orderway in Orderonwaydetails %}
+            <tr>
+                <td>{{Orderway[0]}}</td>
+                <td>{{Orderway[3]}}</td>
+                <td>{{Orderway[1]}}</td>
+                <td>{{Orderway[2]}}</td>
+            </tr>
+                {% endfor %}
+            </tbody>>
         </table>
-    </div>
+        <br>
+        <input style="float:right; margin-right:450px" type="submit" name = "submit_button" value="Place Order of Dishes!">
+        <br>
+    </div> 
+</form>>
 {% endblock %}

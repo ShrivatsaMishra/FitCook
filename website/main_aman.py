@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask,flash, render_template, request, redirect, url_for
 from datetime import date
 from flask_mysqldb import MySQL
 
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'pokemon pokemon'
 
 app.config['MYSQL_HOST'] = 'fitcook.cwx1jntgf3ei.us-east-2.rds.amazonaws.com'
 app.config['MYSQL_USER'] = 'admin'
@@ -36,7 +36,7 @@ def Place_Order(id):
                 today = date.today()
                 d1 = today.strftime("%Y/%m/%d")
                 #query = """INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES ('%s','%s','%s','%s','%s','%s');"""
-                cur.execute("""INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES (%s,%s,%s,%s,%s,%s)""",(id,lastid,0,d1,1,2))
+                cur.execute("""INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES (%s,%s,%s,%s,%s,%s)""",(id,lastid,0,d1,random.randrange(1, 100),2))
                 mysql.connection.commit()
                 cost=0
                 for i in range(len(input)):
@@ -94,6 +94,7 @@ def Order_confirm(id):
             a = int(temp2[0][1]) - int(Ingredients[j][2])
             if(a<0):
                 flag=1
+                break
 
     if(flag==0):
 
@@ -112,9 +113,13 @@ def Order_confirm(id):
 
         cur.execute("""UPDATE Orders SET delivered_status = 2 WHERE Order_ID = %s """,(id,))
         mysql.connection.commit()
+        flash("Order Delivered!","success")
     else:
+        
         cur.execute("""UPDATE Orders SET delivered_status = 3 WHERE Order_ID = %s """,(id,))
         mysql.connection.commit()
+        flash("Order Canceled!","danger")
+        # return redirect(url_for('delivery_edit'))
 
     cur.close()
     return redirect(url_for('delivery_edit'))

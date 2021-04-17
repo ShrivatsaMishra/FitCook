@@ -9,27 +9,26 @@
 <br>
 <div class="text-center h3">Your details</div>
     <div class="container bg_dark">
-        {% for Dietician in Dietician_Details %}
         <br>
         <div class="row">
             <div class="col-1"></div>
             <div class="col-2 h6"> Name</div>
-            <div class="col-sm">: {{Dietician[1]}}</div>
+            <div class="col-sm">: {{Dietician_Details[0][1]}}</div>
         </div>
         <div class="row">
             <div class="col-1"></div>
             <div class="col-2 h6"> Adress</div>
-            <div class="col-sm">: {{Dietician[2]}}</div>
+            <div class="col-sm">: {{Dietician_Details[0][2]}}</div>
         </div>
         <div class="row">
             <div class="col-1"></div>
             <div class="col-2 h6"> Phone No.</div>
-            <div class="col-sm">: {{Dietician[5]}}</iv>
+            <div class="col-sm">: {{Dietician_Details[0][5]}}</div>
         </div>
         <br>
-        {% endfor %}
     </div>
     <br><hr><br>
+
     <div class="container">
         <div class="text-center h3">Your Dishes</div>
         <table class="container table table-hover table-striped bg_dark">
@@ -62,18 +61,20 @@
                     <td>{{Dish[9]}}</td>
                 </tr>
                 {% endfor %}
-            </tbody>>
+            </tbody>
         </table>
-        To EDIT any Dish, Type in its Dish_ID <input type="number" name="id" />
         <br>
-        <input type="submit" name = "submit_button" value="Select">
+        <input type="submit" class = "button-right btn" name = "submit_button" value="Insert New Entry">
+        <br><hr><br>
+        <h6>To EDIT any Dish, Type in its Dish_ID </h6>
+        <br>
+        <input type="number" name="id" />
+        <input type="submit" class="button-left btn" name = "submit_button" value="Select">
         <br>
         <br>
-        <input type="submit" name = "submit_button" value="Insert New Entry">
-        <br>
-        <br>
-        Type Dish_ID of Dish you want to delete <input type="number" name="Dish_id_fordelete" />
-        <input type="submit" name = "submit_button" value="Delete_Entry">
+        <h6>Type Dish_ID of Dish you want to delete</h6><br>
+        <input type="number" name="Dish_id_fordelete" />
+        <input type="submit" class = "button-left btn" name = "submit_button" value="Delete_Entry">
     </div>
     <br><hr><br>
 </form>>

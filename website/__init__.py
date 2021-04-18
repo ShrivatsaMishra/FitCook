@@ -50,11 +50,19 @@ def create_app():
         resultValue2 = cur.execute("Select Dish_ID, Name, Cost, Rating FROM Dish")
         DishDetails = cur.fetchall()
 
+        resultValue3 = cur.execute("Select Dish_ID, Name, Rating FROM Dish WHERE Rating =(SELECT MAX(Rating) FROM Dish)")
+        BestDishDetails = cur.fetchall()
+
+        resultValue4 = cur.execute("Select Dish_ID, Name, Rating FROM Dish WHERE Rating =(SELECT MIN(Rating) FROM Dish)")
+        WorstDishDetails = cur.fetchall()
+
         DishDetails = sorted(DishDetails, key=lambda x: -x[3])
 
+        print(BestDishDetails)
+
         if(resultValue1>0):
-            return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
-        return render_template("publicity.html", Userdetails=Userdetails, DishDetails=DishDetails) 
+            return render_template("bestpublicity.html", Userdetails=Userdetails, DishDetails=DishDetails, BestDishDetails=BestDishDetails, WorstDishDetails=WorstDishDetails) 
+        return render_template("bestpublicity.html", Userdetails=Userdetails, DishDetails=DishDetails, BestDishDetails=BestDishDetails, WorstDishDetails=WorstDishDetails) 
             
     
     @app.route('/login')

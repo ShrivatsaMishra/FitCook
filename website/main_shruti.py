@@ -29,6 +29,12 @@ def Place_Order(id):
     resultValue = cur.execute("SELECT * FROM Dish")
     Dishdetails = cur.fetchall()
 
+    min = cur.execute("SELECT MIN(Cost) FROM Dish")
+    minValue = cur.fetchall()
+
+    max = cur.execute("SELECT MAX(Cost) FROM Dish")
+    maxValue = cur.fetchall()
+
     if request.method == 'POST':
         if request.form['submit_button'] == 'Order Now':
             input = request.form.getlist('mycheckbox')
@@ -45,7 +51,7 @@ def Place_Order(id):
                 wallet = cur.fetchall()
                 walletint = int(wallet[0][0])
                 if walletint < cost:
-                    flash("You don't have enough money in your wallet", "danger")
+                    flash("You don't have enough money in your wallet!", "danger")
                     return redirect(request.url)
 
                 cur.execute("""UPDATE Customer SET Wallet = %s WHERE User_ID = %s""",(walletint-cost,id))
@@ -75,7 +81,7 @@ def Place_Order(id):
         if request.form['submit_button'] == 'Back':
             #cur.execute("""DELETE FROM Orders WHERE Order_ID = %s""",(lastid,))
             return redirect(url_for('customer'))
-    return render_template('PlaceOrder.html', Dishdetails=Dishdetails)
+    return render_template('PlaceOrder.html', Dishdetails=Dishdetails, minValue=minValue, maxValue=maxValue)
 
 
 
@@ -115,7 +121,6 @@ def signup():
 @app.route('/user_profile')
 def user_profile():
     return render_template("user_profile.html")
-
 
 if __name__ == '__main__':
     app.run(debug=True)

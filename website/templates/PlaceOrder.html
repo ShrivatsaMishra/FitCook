@@ -1,7 +1,7 @@
 {% extends "layout_LoggedIn.html" %}
 
 {% block head %}
-    <title>Profile</title>
+    <title>Place Order</title>
 {% endblock %}
 
 {% block body %}
@@ -9,6 +9,23 @@
 <br>
     <div class="container">
         <div class="text-center h3">Dishes</div>
+        <br>
+        <div class="border border-light p-3 mb-4">
+            <div class="row">
+                <div class="col-sm">
+                    <h6>
+                        Min Price: {{minValue[0][0]}} 
+                    </h6>
+                </div>
+                <div class="col-sm">
+                    <br> 
+                    <h6>
+                        Max Price: {{maxValue[0][0]}}
+                    </h6> 
+                </div>>  
+                <!-- </div> -->
+            </div>
+        </div>
         <table class="container table table-hover table-striped bg_dark text-center">
             <thead>
             <tr>

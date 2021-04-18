@@ -18,30 +18,27 @@
         <div class="col-2"></div>
         <div class="main col-sm">
             <div class="login-form">
-                <form>
-                    <div class="form-group">
-                        <label class="h6">Who are you?</label><br>
-                        <input type="radio" id="Customer" name="type" value="Customer">
-                        <label for="Customer">Customer</label>
-                        <input type="radio" id="Manager" name="type" value="Manager" class="ml-4">
-                        <label for="Manager">Manager</label>
-                        <input type="radio" id="Delivery" name="type" value="Delivery" class="ml-4">
-                        <label for="Delivery">Delivery Person</label><br>
-                        <input type="radio" id="Dietician" name="type" value="Dietician">
-                        <label for="Dietician">Chef/Dietician</label>
-                        <input type="radio" id="Marketing" name="type" value="Marketing"  class="ml-4">
-                        <label for="Marketing">Marketing Team</label><br>
+                <form method='POST'>
+                    <div class="input-box">
+                        <span class="details">Who are you? </span>
+                        <select id="inputType" name="type">
+                            <option value="Select_Type">Click here! </option>
+                            <option value="Customer">Customer</option>
+                            <option value="Dietician">Dietician</option>
+                            <option value="Manager">Manager</option>
+                            <option value="DeliveryPerson">Delivery Person</option>
+                            <option value="PR">Public Relations</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label class="h6">User Name</label>
-                        <input type="text" class="form-control" placeholder="User Name">
+                        <label class="h6">Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="Email Address">
                     </div>
                     <div class="form-group">
                         <label class="h6">Password</label>
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" name="password" class="form-control" placeholder="Password">
                     </div>
-                    <button type="submit" class="btn btn-success">Login</button>
-                    <button type="submit" class="btn btn-light">Register</button>
+                    <button type="submit" name = "submit_button" value="Login" class="btn btn-success">Login</button>
                 </form>
             </div>
         </div>

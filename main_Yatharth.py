@@ -11,7 +11,6 @@ app.config['MYSQL_DB'] = 'fitcook'
 mysql = MySQL(app)
 
 
-
 @app.route('/Dish_edit/<string:id>',methods=['GET', 'POST'])
 def Dish_edit(id):
     cur = mysql.connection.cursor()
@@ -25,8 +24,7 @@ def Dish_edit(id):
                 updated_value = input['updated_attribute']
                 print(attribute)
                 print(updated_value)
-                
-                cur.execute("UPDATE fitcook.Dish SET %s = %s WHERE Dish_ID = %s"%(attribute,updated_value,id))
+                cur.execute("UPDATE fitcook.Dish SET %s = '%s' WHERE Dish_ID = %s"%(attribute,updated_value,id))
 
                 resultValue1 = cur.execute("SELECT * FROM fitcook.Dish WHERE Dish_ID = %s",(id,))
                 Dishdetails = cur.fetchall()
@@ -103,7 +101,6 @@ def index1():
                 mysql.connection.commit()
                 cur.close()
         return render_template("Dietician_Profile.html", Dishdetails= Dishdetails,Dietician_Details = Dietician_Details)
-
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():

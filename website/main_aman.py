@@ -111,15 +111,14 @@ def Order_confirm(id):
                 cur.execute("""UPDATE Warehouse SET Quantity_stored = %s WHERE Warehouse_ID = %s and  Ingredient_ID = %s""",(a,c,b))
                 mysql.connection.commit()
 
-        cur.execute("""UPDATE Orders SET delivered_status = 2 WHERE Order_ID = %s """,(id,))
+        cur.execute("""UPDATE Orders SET delivered_status = 1 WHERE Order_ID = %s """,(id,))
         mysql.connection.commit()
         flash("Order Delivered!","success")
     else:
         
         cur.execute("""UPDATE Orders SET delivered_status = 3 WHERE Order_ID = %s """,(id,))
         mysql.connection.commit()
-        flash("Order Canceled!","danger")
-        # return redirect(url_for('delivery_edit'))
+        flash("Order Canceled! Insufficient Ingredients.","danger")
 
     cur.close()
     return redirect(url_for('delivery_edit'))
@@ -128,11 +127,11 @@ def Order_confirm(id):
 @app.route('/delivery_edit',methods=['GET', 'POST'])
 def delivery_edit():
     cur = mysql.connection.cursor()
-    resultValue1 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+    resultValue1 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 1 and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;")
     userDetails1 = cur.fetchall()
 
 
-    resultValue2 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+    resultValue2 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 1 and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;")
     userDetails2 = cur.fetchall()
 
     if request.method == 'POST':
@@ -149,10 +148,10 @@ def delivery_edit():
 @app.route('/delivery',methods=['GET', 'POST'])
 def delivery():
     cur = mysql.connection.cursor()
-    resultValue1 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+    resultValue1 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;")
     userDetails1 = cur.fetchall()
 
-    resultValue2 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+    resultValue2 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;")
     userDetails2 = cur.fetchall()
 
     if request.method == 'POST':

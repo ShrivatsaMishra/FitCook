@@ -18,38 +18,24 @@
         <div class="col-2"></div>
         <div class="main col-sm">
             <div class="register-form">
-                <form>
+                <form method='POST'>
                     <div class="form-group">
                         <label class="h6">Name</label>
-                        <input type="text" class="form-control" placeholder="Name">
+                        <input type="text" name="name" class="form-control" placeholder="Name">
                     </div>
                     <div class="form-group">
-                        <label class="h6">Who are you?</label><br>
-                        <input type="radio" id="Male" name="type" value="Male">
-                        <label for="Male">Male</label>
-                        <input type="radio" id="Female" name="type" value="Female" class="ml-4">
-                        <label for="Female">Female</label>
-                        <input type="radio" id="Other" name="type" value="Other" class="ml-4">
-                        <label for="Other">Other</label>
-                    </div>
-                    <div class="form-group">
-                        <label class="h6">Email</label>
-                        <input type="email" class="form-control" placeholder="Email">
-                    </div>
-                    <div class="form-group">
-                        <label class="h6">Phone Number</label>
-                        <input type="Phone_number" class="form-control" placeholder="Phone_number">
+                        <label class="h6"> Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="Email Address">
                     </div>
                     <div class="form-group">
                         <label class="h6">Password</label>
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" name="password" placeholder="Password">
                     </div>
                     <div class="form-group">
                         <label class="h6">Confirm Password</label>
-                        <input type="password" class="form-control" placeholder="Confirm Password">
+                        <input type="password" class="form-control" name="password2" placeholder="Confirm Password">
                     </div>
-                    <button type="submit" class="btn btn-success">Register</button>
-                    <button type="submit" class="btn btn-light">Login</button>
+                    <input class="button text-center btn" type="submit" name = "submit_button" value="Register">
                     <div class="row" style="height: 100px;"></div>
                 </form>
             </div>

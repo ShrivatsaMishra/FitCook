@@ -36,7 +36,7 @@ def Place_Order(id):
                 today = date.today()
                 d1 = today.strftime("%Y/%m/%d")
                 #query = """INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES ('%s','%s','%s','%s','%s','%s');"""
-                cur.execute("""INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES (%s,%s,%s,%s,%s,%s)""",(id,lastid,0,d1,random.randrange(1, 100),2))
+                cur.execute("""INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES (%s,%s,%s,%s,%s,%s)""",(id,lastid,0,d1,1,2))
                 mysql.connection.commit()
                 cost=0
                 for i in range(len(input)):

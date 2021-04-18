@@ -151,17 +151,14 @@ def create_app():
         if(resultValue1>0):
             return render_template("bestpublicity.html", Userdetails=Userdetails, DishDetails=DishDetails, BestDishDetails=BestDishDetails, WorstDishDetails=WorstDishDetails) 
         return render_template("bestpublicity.html", Userdetails=Userdetails, DishDetails=DishDetails, BestDishDetails=BestDishDetails, WorstDishDetails=WorstDishDetails) 
-            
-    
+             
     @app.route('/logout')
     def logout():
         return "<h2>Log Out</h2>"
 
-
     @app.route('/signup')
     def signup():
         return render_template("signup.html")
-
 
     @app.route('/customer_signup', methods=['POST','GET'])
     def customer_signup():
@@ -234,7 +231,6 @@ def create_app():
             return redirect(url_for('login'))
 
         return render_template("manager_signup.html")
-
 
     @app.route('/deliveryperson_signup', methods=['POST','GET'])
     def deliveryperson_signup():
@@ -314,10 +310,209 @@ def create_app():
             return redirect(url_for('login'))
         return render_template("publicity_signup.html")
 
+    @app.route('/delivery_edit',methods=['GET', 'POST'])
+    def delivery_edit():
+        cur = mysql.connection.cursor()
+        resultValue1 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 1 and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+        userDetails1 = cur.fetchall()
 
 
-    @app.route('/user_profile')
-    def user_profile():
-        return render_template("user_profile.html")
+        resultValue2 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 1 and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+        userDetails2 = cur.fetchall()
+
+        if request.method == 'POST':
+            if request.form['submit_button'] == 'Deliver':
+                input = request.form
+                id = input['id']
+                cur.close()
+                return redirect(url_for('Order_confirm', id=id))
+            else:
+                return redirect(url_for('delivery'))
+        return render_template('Delivery_person_edit.html',userDetails1=userDetails1,userDetails2=userDetails2)
+
+
+    @app.route('/delivery',methods=['GET', 'POST'])
+    def delivery():
+        cur = mysql.connection.cursor()
+        resultValue1 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 2) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+        userDetails1 = cur.fetchall()
+
+        resultValue2 = cur.execute("select t2.User_ID,  t2.Name, t1.Order_ID, t2.Address from (select User_ID, Order_ID from Orders natural join Delivery_person where deliveryP_Id = 10 and delivered_status = 1) as t1 join Customer t2 on t1.user_id = t2.user_id;")
+        userDetails2 = cur.fetchall()
+
+        if request.method == 'POST':
+            return redirect(url_for('delivery_edit'))
+        return render_template('Delivery_person.html',userDetails1=userDetails1,userDetails2=userDetails2)
+
+    @app.route('/Place_Order/<string:id>',methods=['GET', 'POST'])
+    def Place_Order(id):
+        cur = mysql.connection.cursor()
+        resultValue = cur.execute("SELECT * FROM Dish")
+        Dishdetails = cur.fetchall()
+
+        min = cur.execute("SELECT MIN(Cost) FROM Dish")
+        minValue = cur.fetchall()
+
+        max = cur.execute("SELECT MAX(Cost) FROM Dish")
+        maxValue = cur.fetchall()
+
+        if request.method == 'POST':
+            if request.form['submit_button'] == 'Order Now':
+                input = request.form.getlist('mycheckbox')
+                    #id = input['id']
+                if len(input)>0:
+                    #print(input)
+                    cost=0
+                    for i in range(len(input)):
+                        selected = cur.execute("SELECT Cost FROM Dish WHERE Dish_ID = %s", (input[i],))
+                        price = cur.fetchall()
+                        cost += int(price[0][0])
+                    
+                    selected2 = cur.execute("SELECT Wallet FROM Customer WHERE User_ID = %s", (id,))
+                    wallet = cur.fetchall()
+                    walletint = int(wallet[0][0])
+                    if walletint < cost:
+                        flash("You don't have enough money in your wallet!", "danger")
+                        return redirect(request.url)
+
+                    cur.execute("""UPDATE Customer SET Wallet = %s WHERE User_ID = %s""",(walletint-cost,id))
+
+                    resultValue4 = cur.execute("SELECT Order_ID FROM Orders ORDER BY Order_ID DESC LIMIT 1;")
+                    lastentry = cur.fetchall()
+                    lastid = int(lastentry[0][0])+1
+                    today = date.today()
+                    d1 = today.strftime("%Y/%m/%d")
+                    
+                    cur.execute("""INSERT INTO Orders (User_ID,Order_ID,Price,Date,DeliveryP_ID,Delivered_status) VALUES (%s,%s,%s,%s,%s,%s)""",(id,lastid,cost,d1,random.randrange(1, 100),2))
+                    mysql.connection.commit()
+
+                    for i in range(len(input)):
+                        resultValue = cur.execute("SELECT Cost FROM Dish WHERE Dish_ID = %s", (input[i],))
+                        price = cur.fetchall()
+                        cost += int(price[0][0])
+                        cur.execute("""INSERT INTO contains (Dish_ID,Order_ID) VALUES (%s,%s)""",(input[i],lastid))
+                        mysql.connection.commit()
+
+                    #cur.execute("""UPDATE Orders SET Price = %s WHERE Order_ID = %s""",(cost,lastid))
+                    #mysql.connection.commit()
+                    cur.close()
+                flash("Your order is has been placed, its on the way!!!", "success")
+                return redirect(url_for('customer'))
+
+            if request.form['submit_button'] == 'Back':
+                #cur.execute("""DELETE FROM Orders WHERE Order_ID = %s""",(lastid,))
+                return redirect(url_for('customer'))
+        return render_template('PlaceOrder.html', Dishdetails=Dishdetails, minValue=minValue, maxValue=maxValue)
+
+    @app.route('/customer', methods=['GET', 'POST'])
+    def customer():
+        cur = mysql.connection.cursor()
+        id= 23
+        resultValue1 = cur.execute("SELECT * FROM Customer WHERE USER_ID = %s", (id,))
+        Userdetails = cur.fetchall()
+
+        resultValue2 = cur.execute("SELECT Order_ID, COUNT(*), Price, Date FROM (SELECT * FROM Orders WHERE User_ID = %s AND Delivered_status= '1') as T NATURAL JOIN contains GROUP BY Order_ID", (id,))
+        Orderdetails = cur.fetchall()
+        #print("hi",len(Orderdetails))
+
+        resultValue3 = cur.execute("SELECT Order_ID, COUNT(*), Price, Date FROM (SELECT * FROM Orders WHERE User_ID = %s AND Delivered_status= '2') as T NATURAL JOIN contains GROUP BY Order_ID", (id,))
+        Orderonwaydetails = cur.fetchall()
+
+        if resultValue1 > 0:
+            if request.method == 'POST':
+                return redirect(url_for('Place_Order', id=id))
+        return render_template("user_profile.html", Userdetails=Userdetails, Orderdetails=Orderdetails, Orderonwaydetails=Orderonwaydetails)
+
+    @app.route('/Dish_edit/<string:id>',methods=['GET', 'POST'])
+    def Dish_edit(id):
+        cur = mysql.connection.cursor()
+        resultValue = cur.execute("SELECT * FROM fitcook.Dish WHERE Dish_ID = %s",(id,))
+        if resultValue > 0:
+            Dishdetails = cur.fetchall()
+            if request.method == 'POST':
+                if request.form['submit_button'] == 'Update':
+                    input = request.form
+                    attribute = input['attribute']
+                    updated_value = input['updated_attribute']
+                    print(attribute)
+                    print(updated_value)
+                    cur.execute("UPDATE fitcook.Dish SET %s = '%s' WHERE Dish_ID = %s"%(attribute,updated_value,id))
+
+                    resultValue1 = cur.execute("SELECT * FROM fitcook.Dish WHERE Dish_ID = %s",(id,))
+                    Dishdetails = cur.fetchall()
+
+                    mysql.connection.commit()
+                    cur.close()
+
+            return render_template('Dietician_Dish_EDIT.html', Dishdetails= Dishdetails)
+
+
+
+    @app.route('/NewDish/<string:Dietician_ID>',methods=['GET', 'POST'])
+    def newDish(Dietician_ID):
+        cur = mysql.connection.cursor()
+        resultValue = cur.execute("SELECT * FROM fitcook.Dish")
+        Dishdetails = cur.fetchall()
+        if request.method == 'POST':
+            if request.form['submit_button'] == 'Insert New Dish !':
+                input = request.form
+                Name = input['Name']
+                Cost = input['Cost']
+                Category = input['Category']
+                Calories = input['Calories']
+                Rating = input['Rating']
+                Fats = input['Fats']
+                Carbs = input['Carbs']
+                Protein = input['Protein']
+                Recipe = input['Recipe']
+                resultValue2 = cur.execute("SELECT Dish_ID FROM fitcook.Dish ORDER BY Dish_ID DESC LIMIT 1;")
+                lastentry = cur.fetchall()
+                lastid = int(lastentry[0][0])+1
+                cur.execute("""INSERT INTO fitcook.Dish (Dish_ID,Name,Cost,Category,Calories,Rating,Fats,Carbs,Protein,Recipe) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",(lastid,Name,Cost,Category,Calories,Rating,Fats,Carbs,Protein,Recipe))
+                cur.execute("""INSERT INTO fitcook.assesses(Dish_ID,Dietician_ID) VALUES (%s,%s)""",(lastid,Dietician_ID))
+                resultValue2 = cur.execute("SELECT * FROM fitcook.Dish")
+                Dishdetails = cur.fetchall()
+                mysql.connection.commit()
+                cur.close()
+                
+            if request.form['submit_button'] == 'Back':
+                return redirect(url_for('index1'))
+
+        return render_template('Dietician_New_DISH.html',Dishdetails= Dishdetails)
+
+
+    @app.route('/Dish',methods=['GET', 'POST'])
+    def index1():
+        cur = mysql.connection.cursor()
+        cur1 = mysql.connection.cursor()
+        Dietician_ID = 11
+        resultValue = cur.execute(" SELECT * FROM (fitcook.Dish NATURAL JOIN fitcook.assesses) WHERE Dietician_ID = %s",(Dietician_ID,))
+        resultValue123 = cur1.execute(" SELECT * FROM fitcook.Dietician WHERE Dietician_ID = %s",(Dietician_ID,))
+        if resultValue > 0:
+            Dishdetails = cur.fetchall()
+            Dietician_Details = cur1.fetchall()
+            if request.method == 'POST':
+                if request.form['submit_button'] == 'Select':
+                    input = request.form
+                    id = input['id']
+                    print(id)
+                    cur.close()
+                    return redirect(url_for('Dish_edit', id=id))
+                if request.form['submit_button'] == 'Insert New Entry':
+                    return redirect(url_for('newDish',Dietician_ID= Dietician_ID))
+                if request.form['submit_button'] == 'Delete_Entry':
+                    #here fitst extract input id then write delete command then refresh
+                    input = request.form
+                    id = input['Dish_id_fordelete']
+                    cur.execute("""DELETE FROM fitcook.assesses WHERE Dish_ID = %s""",(id,))
+                    cur.execute("""DELETE FROM fitcook.Dish WHERE Dish_ID = %s""",(id,))
+
+                    resultValue1 = cur.execute(" SELECT * FROM (fitcook.Dish NATURAL JOIN fitcook.assesses) WHERE Dietician_ID = %s",(Dietician_ID,))
+                    Dishdetails = cur.fetchall()
+
+                    mysql.connection.commit()
+                    cur.close()
+            return render_template("Dietician_Profile.html", Dishdetails= Dishdetails,Dietician_Details = Dietician_Details)
+
 
     return app

@@ -89,20 +89,23 @@ def Place_Order(id):
 def customer():
     cur = mysql.connection.cursor()
     id= 23
-    resultValue1 = cur.execute("SELECT * FROM Customer WHERE USER_ID = %s", (id,))
+    resultValue1 = cur.execute("SELECT Name, Address, Mobile, email, Wallet FROM Customer WHERE USER_ID = %s", (id,))
     Userdetails = cur.fetchall()
 
     resultValue2 = cur.execute("SELECT Order_ID, COUNT(*), Price, Date FROM (SELECT * FROM Orders WHERE User_ID = %s AND Delivered_status= '1') as T NATURAL JOIN contains GROUP BY Order_ID", (id,))
     Orderdetails = cur.fetchall()
+
+    Price = cur.execute("SELECT SUM(Price) FROM Orders WHERE User_ID = %s AND Delivered_status = '1'", (id,))
+    priceValue = cur.fetchall()
     #print("hi",len(Orderdetails))
 
-    resultValue3 = cur.execute("SELECT Order_ID, COUNT(*), Price, Date FROM (SELECT * FROM Orders WHERE User_ID = %s AND Delivered_status= '2') as T NATURAL JOIN contains GROUP BY Order_ID", (id,))
+    resultValue3 = cur.execute("SELECT Order_ID, COUNT(*), Price, Date FROM (SELECT * FROM Orders WHERE User_ID = %s AND Delivered_status= '2') as T1 NATURAL JOIN contains GROUP BY Order_ID", (id,))
     Orderonwaydetails = cur.fetchall()
 
     if resultValue1 > 0:
         if request.method == 'POST':
             return redirect(url_for('Place_Order', id=id))
-    return render_template("user_profile.html", Userdetails=Userdetails, Orderdetails=Orderdetails, Orderonwaydetails=Orderonwaydetails)
+    return render_template("user_profile.html", Userdetails=Userdetails, Orderdetails=Orderdetails, Orderonwaydetails=Orderonwaydetails, priceValue=priceValue)
 
 
 @app.route('/login')

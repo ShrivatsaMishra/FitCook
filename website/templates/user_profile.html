@@ -1,7 +1,7 @@
 {% extends "layout_LoggedIn.html" %}
 
 {% block head %}
-    <title>Profile</title>
+    <title>Customer Profile</title>
 {% endblock %}
 
 {% block body %}
@@ -13,17 +13,27 @@
         <div class="row">
             <div class="col-1"></div>
             <div class="col-2 h6"> Name</div>
+            <div class="col-sm">: {{Userdetails[0][0]}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Username</div>
+            <div class="col-sm">: {{Userdetails[0][3]}}</div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-2 h6"> Home Address</div>
             <div class="col-sm">: {{Userdetails[0][1]}}</div>
         </div>
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-2 h6"> Adress</div>
-            <div class="col-sm">: {{Userdetails[0][4]}}</div>
+            <div class="col-2 h6"> Phone No.</div>
+            <div class="col-sm">: {{Userdetails[0][2]}}</div>
         </div>
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-2 h6"> Phone No.</div>
-            <div class="col-sm">: {{Userdetails[0][5]}}</div>
+            <div class="col-2 h6"> Amount in Wallet</div>
+            <div class="col-sm">: Rs.{{Userdetails[0][4]}}</div>
         </div>
         <br>
     </div>
@@ -50,6 +60,15 @@
                 {% endfor %}
             </tbody>>
         </table>
+        <div class="border border-light p-3 mb-4">
+            <div class="row">
+                <div class="col-sm">
+                    <h6 style="float:left">
+                       Total amount of successfully delivered Orders: Rs.{{priceValue[0][0]}} 
+                    </h6>
+                </div>
+            </div>
+        </div>
     </div>
     <br><hr><br>
     <div class="container">

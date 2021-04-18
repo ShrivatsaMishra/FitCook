@@ -162,3 +162,11 @@ a :hover {
 .button-right:hover {
     color:#9EA276;
 }
+
+#inputType {
+    border-color: #9EA276;
+    border-radius: 5px;
+    color: #9EA276;
+    padding: 1%;
+    font-size: 2ex;
+}
